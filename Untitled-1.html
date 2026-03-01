@@ -1,0 +1,42 @@
+// ...existing code...
+header h1{
+    color:#00f7ff;
+    text-shadow:0 0 15px #00f7ff;
+}
+/* new: make header title linkable */
+header h1 a{
+    color:inherit;
+    text-decoration:none;
+    display:inline-block;
+}
+/* new: style game title links */
+.card h3 a{
+    color:inherit;
+    text-decoration:none;
+    transition:0.2s;
+}
+.card h3 a:hover{
+    color:#00f7ff;
+    text-shadow:0 0 10px #00f7ff;
+}
+// ...existing code...
+<header>
+    <h1><a href="https://www.playstation.com" target="_blank" rel="noopener noreferrer">🎮 PS MEGA SALE</a></h1>
+    <input type="text" id="searchInput" placeholder="Search Game...">
+</header>
+// ...existing code...
+function displayGames(gameList){
+    gameContainer.innerHTML = "";
+    gameList.forEach(game=>{
+        gameContainer.innerHTML += `
+        <div class="card">
+            <img src="${game.image}" alt="${game.name}">
+            <h3><a href="${game.link}" target="_blank" rel="noopener noreferrer">${game.name}</a></h3>
+            <p class="price">₹${game.price}</p>
+            <button class="buy-btn" onclick="addToCart(${game.price})">Add to Cart</button>
+            <a class="link-btn" href="${game.link}" target="_blank" rel="noopener noreferrer">Official Page</a>
+        </div>
+        `;
+    });
+}
+// ...existing
