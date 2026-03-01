@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS Games Mega Sale</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron', sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f0f0f,#141e30,#243b55);
+    color:white;
+    text-align:center;
+}
+
+/* HEADER */
+header{
+    background:black;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+header h1{
+    color:#00f7ff;
+    text-shadow:0 0 15px #00f7ff;
+}
+
+header input{
+    padding:8px 15px;
+    border-radius:20px;
+    border:none;
+}
+
+/* HERO */
+.hero{
+    padding:40px 20px;
+}
+
+.hero span{
+    color:#00f7ff;
+    text-shadow:0 0 20px #00f7ff;
+}
+
+/* FILTERS */
+.filters{
+    margin:20px;
+}
+
+.filters button{
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    background:#00f7ff;
+    transition:0.3s;
+}
+
+.filters button:hover{
+    background:#ff00ff;
+    color:white;
+}
+
+/* GAME CARDS */
+.game-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+}
+
+.card{
+    width:250px;
+    background:#111;
+    border-radius:15px;
+    overflow:hidden;
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 20px #00f7ff;
+}
+
+.card img{
+    width:100%;
+    height:280px;
+    object-fit:cover;
+}
+
+.card h3{
+    margin:10px 0;
+}
+
+.price{
+    color:#00ff88;
+}
+
+.card button, .card a{
+    margin:8px 5px;
+    padding:8px 15px;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.buy-btn{
+    background:#00f7ff;
+    color:black;
+}
+
+.link-btn{
+    background:#ff00ff;
+    color:white;
+}
+
+/* CART */
+.cart-section{
+    margin:30px;
+    font-size:20px;
+}
+
+/* FOOTER */
+footer{
+    background:black;
+    padding:15px;
+    margin-top:20px;
+    color:#aaa;
+}
+
+@media(max-width:768px){
+    header{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🎮 PS MEGA SALE</h1>
+    <input type="text" id="searchInput" placeholder="Search Game...">
+</header>
+
+<section class="hero">
+    <h2>Up to <span>70% OFF</span></h2>
+    <p>Limited Time PlayStation Mega Discount</p>
+</section>
+
+<section class="filters">
+    <button onclick="filterGames('All')">All</button>
+    <button onclick="filterGames('Action')">Action</button>
+    <button onclick="filterGames('Sports')">Sports</button>
+    <button onclick="filterGames('Adventure')">Adventure</button>
+</section>
+
+<section class="game-container" id="gameContainer"></section>
+
+<section class="cart-section">
+    🛒 Cart Total: ₹<span id="totalPrice">0</span>
+</section>
+
+<footer>
+    © 2026 PS Games Mega Sale | Developed by Ansh Sharma
+</footer>
+
+<script>
+const games = [
+{
+    name: "God of War Ragnarök",
+    category: "Action",
+    price: 2499,
+    image: "https://upload.wikimedia.org/wikipedia/en/a/a7/God_of_War_Ragnar%C3%B6k_cover.jpg",
+    link: "https://www.playstation.com/en-in/games/god-of-war-ragnarok/"
+},
+{
+    name: "Marvel's Spider-Man 2",
+    category: "Action",
+    price: 3999,
+    image: "https://upload.wikimedia.org/wikipedia/en/7/7c/Spider-Man_2_PS5_cover_art.jpg",
+    link: "https://www.playstation.com/en-in/games/marvels-spider-man-2/"
+},
+{
+    name: "EA Sports FC 24",
+    category: "Sports",
+    price: 2099,
+    image: "https://upload.wikimedia.org/wikipedia/en/5/5c/EA_Sports_FC_24_cover.jpg",
+    link: "https://www.playstation.com/en-in/games/ea-sports-fc/"
+},
+{
+    name: "Horizon Forbidden West",
+    category: "Adventure",
+    price: 1999,
+    image: "https://upload.wikimedia.org/wikipedia/en/8/8d/Horizon_Forbidden_West_cover_art.jpg",
+    link: "https://www.playstation.com/en-in/games/horizon-forbidden-west/"
+}
+];
+
+let total = localStorage.getItem("cartTotal") ? parseInt(localStorage.getItem("cartTotal")) : 0;
+
+const gameContainer = document.getElementById("gameContainer");
+const totalPrice = document.getElementById("totalPrice");
+const searchInput = document.getElementById("searchInput");
+
+totalPrice.innerText = total;
+
+function displayGames(gameList){
+    gameContainer.innerHTML = "";
+    gameList.forEach(game=>{
+        gameContainer.innerHTML += `
+        <div class="card">
+            <img src="${game.image}">
+            <h3>${game.name}</h3>
+            <p class="price">₹${game.price}</p>
+            <button class="buy-btn" onclick="addToCart(${game.price})">Add to Cart</button>
+            <a class="link-btn" href="${game.link}" target="_blank">Official Page</a>
+        </div>
+        `;
+    });
+}
+
+function filterGames(category){
+    if(category === "All"){
+        displayGames(games);
+    } else{
+        const filtered = games.filter(game => game.category === category);
+        displayGames(filtered);
+    }
+}
+
+function addToCart(price){
+    total += price;
+    totalPrice.innerText = total;
+    localStorage.setItem("cartTotal", total);
+}
+
+searchInput.addEventListener("keyup", ()=>{
+    const value = searchInput.value.toLowerCase();
+    const filtered = games.filter(game =>
+        game.name.toLowerCase().includes(value)
+    );
+    displayGames(filtered);
+});
+
+displayGames(games);
+</script>
+
+</body>
+</html>
